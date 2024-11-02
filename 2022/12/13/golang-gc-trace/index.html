@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.nicolerobin.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="golang提供了丰富的工具用来查看服务运行时状态，这次就来看一下如何查看golang服务的gc运行时信息。 这里我们以下面这段代码为例子来观察gc的信息，该代码在map中存储了大量的对象，这些对象会对gc造成很大的压力，导致gc每次都需要对他们进行扫描。 123456789101112131415161718192021222324252627282930package mainimport &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang调试、查看gc信息">
+<meta property="og:url" content="http://blog.nicolerobin.top/2022/12/13/golang-gc-trace/index.html">
+<meta property="og:site_name" content="听香水榭">
+<meta property="og:description" content="golang提供了丰富的工具用来查看服务运行时状态，这次就来看一下如何查看golang服务的gc运行时信息。 这里我们以下面这段代码为例子来观察gc的信息，该代码在map中存储了大量的对象，这些对象会对gc造成很大的压力，导致gc每次都需要对他们进行扫描。 123456789101112131415161718192021222324252627282930package mainimport &amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-12-13T12:32:53.000Z">
+<meta property="article:modified_time" content="2024-11-02T10:57:55.597Z">
+<meta property="article:author" content="robin zhang">
+<meta property="article:tag" content="golang">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.nicolerobin.top/2022/12/13/golang-gc-trace/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://blog.nicolerobin.top/2022/12/13/golang-gc-trace/","path":"2022/12/13/golang-gc-trace/","title":"golang调试、查看gc信息"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>golang调试、查看gc信息 | 听香水榭</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">听香水榭</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">宠辱不惊，闲看庭前花开花落；去留无意，漫随天边云卷云舒。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-number">1.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">robin zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nicolerobin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nicolerobin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lit050528@gmail.com" title="E-Mail → mailto:lit050528@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/lit10050528" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;lit10050528" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.nicolerobin.top/2022/12/13/golang-gc-trace/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="robin zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="听香水榭">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="golang调试、查看gc信息 | 听香水榭">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          golang调试、查看gc信息
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-12-13 20:32:53" itemprop="dateCreated datePublished" datetime="2022-12-13T20:32:53+08:00">2022-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-11-02 18:57:55" itemprop="dateModified" datetime="2024-11-02T18:57:55+08:00">2024-11-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>golang提供了丰富的工具用来查看服务运行时状态，这次就来看一下如何查看golang服务的gc运行时信息。</p>
+<p>这里我们以下面这段代码为例子来观察gc的信息，该代码在map中存储了大量的对象，这些对象会对gc造成很大的压力，导致gc每次都需要对他们进行扫描。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;time&quot;</span></span><br><span class="line"><span class="keyword">type</span> Item <span class="keyword">struct</span> &#123;</span><br><span class="line">	A <span class="type">string</span></span><br><span class="line">	B <span class="type">string</span></span><br><span class="line">	C <span class="type">string</span></span><br><span class="line">	D <span class="type">string</span></span><br><span class="line">	E <span class="type">string</span></span><br><span class="line">	F <span class="type">string</span></span><br><span class="line">	G G</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> G <span class="keyword">struct</span> &#123;</span><br><span class="line">	H <span class="type">int</span></span><br><span class="line">	I <span class="type">int</span></span><br><span class="line">	K <span class="type">int</span></span><br><span class="line">	L <span class="type">int</span></span><br><span class="line">	M <span class="type">int</span></span><br><span class="line">	N <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]*Item, <span class="number">10</span>*<span class="number">1024</span>*<span class="number">1024</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1024</span>*<span class="number">1024</span>; i++ &#123;</span><br><span class="line">		m[i] = &amp;Item&#123;&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; ; i++ &#123;</span><br><span class="line">		<span class="built_in">delete</span>(m, i)</span><br><span class="line">		m[<span class="number">1024</span>*<span class="number">1024</span>+i] = &amp;Item&#123;&#125;</span><br><span class="line">		time.Sleep(<span class="number">10</span> * time.Millisecond)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>启用gc信息输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GODEBUG=gctrace=1 go run main.go</span><br></pre></td></tr></table></figure>
+
+<p>程序启动后会将gc信息输出到控制台：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GC forced</span><br><span class="line">gc 2 @120.093s 0%: 0.050+173+0.002 ms clock, 0.40+0/344/0+0.023 ms cpu, 453-&gt;453-&gt;450 MB, 612 MB goal, 0 MB stacks, 0 MB globals, 8 P</span><br><span class="line">GC forced</span><br><span class="line">gc 5 @121.834s 0%: 0.35+2.1+0.007 ms clock, 2.8+0/2.9/0+0.058 ms cpu, 2-&gt;2-&gt;0 MB, 4 MB goal, 0 MB stacks, 0 MB globals, 8 P</span><br><span class="line">GC forced</span><br><span class="line">gc 3 @240.273s 0%: 0.064+215+0.003 ms clock, 0.51+0/420/0+0.025 ms cpu, 451-&gt;451-&gt;450 MB, 900 MB goal, 0 MB stacks, 0 MB globals, 8 P</span><br><span class="line">GC forced</span><br><span class="line">gc 6 @243.549s 0%: 0.27+1.0+0.004 ms clock, 2.2+0/1.9/0+0.036 ms cpu, 0-&gt;0-&gt;0 MB, 4 MB goal, 0 MB stacks, 0 MB globals, 8 P</span><br><span class="line">GC forced</span><br><span class="line">gc 4 @360.503s 0%: 0.11+199+0.006 ms clock, 0.89+0/388/0+0.053 ms cpu, 451-&gt;451-&gt;450 MB, 900 MB goal, 0 MB stacks, 0 MB globals, 8 P</span><br><span class="line">GC forced</span><br><span class="line">gc 7 @363.559s 0%: 0.50+2.2+0.012 ms clock, 4.0+0/4.0/0+0.098 ms cpu, 0-&gt;0-&gt;0 MB, 4 MB goal, 0 MB stacks, 0 MB globals, 8 P</span><br></pre></td></tr></table></figure>
+
+<p>这些输出信息的含义如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. gc 2 @120.093s：第65次执行，进程已经启动16.996秒</span><br><span class="line">2. 0%：本次执行gc占用的进程cpu时间的百分比</span><br><span class="line">3. 0.050+173+0.002 ms clock：本次gc的耗时。依次是STW清扫的时间, 并发标记和扫描的时间，STW标记的时间。（STW即stop-the-world，STW时间内进程完全被挂起），可以看到标记阶段的耗时非常高，达到了173ms。</span><br><span class="line">4. 0.40+0/344/0+0.023 ms cpu：本次gc占用cpu时间</span><br><span class="line">5. 453-&gt;453-&gt;450 MB：堆的大小，gc后堆的大小，存活堆的大小</span><br><span class="line">6. 612 MB goal：堆的大小</span><br><span class="line">7. 0 MB stacks：栈的大小</span><br><span class="line">8. 0 MB globaks：全局变量的大小</span><br><span class="line">9. 8 P：CPU核数</span><br><span class="line">10. GC forced：由runtime.GC()强制执行</span><br><span class="line">11. 系统内存回收信息：scvg0: inuse: 6, idle: 12, sys: 18, released: 0, consumed: 18 (MB)</span><br><span class="line">- inuse：使用多少M内存</span><br><span class="line">- idle：剩下要清除的内存</span><br><span class="line">- sys：系统映射的内存</span><br><span class="line">- released：释放的系统内存</span><br><span class="line">- consumed：申请的系统内存</span><br></pre></td></tr></table></figure>
+
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/golang/go/issues/9477">runtime: Large maps cause significant GC pauses #9477</a></li>
+<li><a target="_blank" rel="noopener" href="https://colobu.com/2019/11/18/how-is-the-bigcache-is-fast/">bigcache优化技巧</a></li>
+<li><a target="_blank" rel="noopener" href="https://allegro.tech/2016/03/writing-fast-cache-service-in-go.html/">Writing a very fast cache service with millions of entries in Go</a></li>
+<li><a target="_blank" rel="noopener" href="https://pkg.go.dev/github.com/glycerine/offheap">offheap</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"># golang</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/05/zichao/" rel="prev" title="自嘲">
+                  <i class="fa fa-angle-left"></i> 自嘲
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/01/08/tcpdump-guide/" rel="next" title="tcpdump使用指南">
+                  tcpdump使用指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">robin zhang</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"nicolerobin","repo":"nicolerobin.github.io","client_id":"127f5a84a9541b7ae466","client_secret":"0a8f715f4aeb0f5c9b507fb86cb65b9ef596bc02","admin_user":"nicolerobin","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"5969dec043d85ccf6c5d063fdaea2f26"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

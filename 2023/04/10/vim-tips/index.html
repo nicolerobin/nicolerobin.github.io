@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.nicolerobin.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="vim使用技巧移动操作基于行移动123456789101112131415基础操作：hjkl屏幕行是指的当一行文本过长导致分多行展示时的不同行gj: 向上移动一个屏幕行gk: 向下移动一个屏幕行0: 移动到行首g0: 移动到屏幕行行首^: 移动到行首第一个非空白符g^: 移动屏幕行第一个非空白符$: 移动到行尾g$: 移动到屏幕行行尾ctrl+e:num: 跳转到指定行zt: 移动位置，将当前行置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim-tips">
+<meta property="og:url" content="http://blog.nicolerobin.top/2023/04/10/vim-tips/index.html">
+<meta property="og:site_name" content="听香水榭">
+<meta property="og:description" content="vim使用技巧移动操作基于行移动123456789101112131415基础操作：hjkl屏幕行是指的当一行文本过长导致分多行展示时的不同行gj: 向上移动一个屏幕行gk: 向下移动一个屏幕行0: 移动到行首g0: 移动到屏幕行行首^: 移动到行首第一个非空白符g^: 移动屏幕行第一个非空白符$: 移动到行尾g$: 移动到屏幕行行尾ctrl+e:num: 跳转到指定行zt: 移动位置，将当前行置">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-09T16:57:25.000Z">
+<meta property="article:modified_time" content="2024-11-02T11:30:58.644Z">
+<meta property="article:author" content="robin zhang">
+<meta property="article:tag" content="vim">
+<meta property="article:tag" content="cheat_sheet">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.nicolerobin.top/2023/04/10/vim-tips/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://blog.nicolerobin.top/2023/04/10/vim-tips/","path":"2023/04/10/vim-tips/","title":"vim-tips"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vim-tips | 听香水榭</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">听香水榭</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">宠辱不惊，闲看庭前花开花落；去留无意，漫随天边云卷云舒。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#vim%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.</span> <span class="nav-text">vim使用技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">移动操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E8%A1%8C%E7%A7%BB%E5%8A%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">基于行移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%8D%95%E8%AF%8D%E7%A7%BB%E5%8A%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">基于单词移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%9F%A5%E6%89%BE%E7%9A%84%E7%A7%BB%E5%8A%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">基于查找的移动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%93%8D%E4%BD%9C"><span class="nav-number">1.2.</span> <span class="nav-text">修改操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.</span> <span class="nav-text">窗口操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E5%8C%BA%E6%93%8D%E4%BD%9C"><span class="nav-number">1.4.</span> <span class="nav-text">缓冲区操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E9%A1%B5%E6%93%8D%E4%BD%9C"><span class="nav-number">1.5.</span> <span class="nav-text">标签页操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">1.6.</span> <span class="nav-text">文件操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.7.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">robin zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nicolerobin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nicolerobin" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:lit050528@gmail.com" title="E-Mail → mailto:lit050528@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/lit10050528" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;lit10050528" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.nicolerobin.top/2023/04/10/vim-tips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="robin zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="听香水榭">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="vim-tips | 听香水榭">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vim-tips
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-04-10 00:57:25" itemprop="dateCreated datePublished" datetime="2023-04-10T00:57:25+08:00">2023-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-11-02 19:30:58" itemprop="dateModified" datetime="2024-11-02T19:30:58+08:00">2024-11-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="vim使用技巧"><a href="#vim使用技巧" class="headerlink" title="vim使用技巧"></a>vim使用技巧</h1><h2 id="移动操作"><a href="#移动操作" class="headerlink" title="移动操作"></a>移动操作</h2><h3 id="基于行移动"><a href="#基于行移动" class="headerlink" title="基于行移动"></a>基于行移动</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">基础操作：hjkl</span><br><span class="line">屏幕行是指的当一行文本过长导致分多行展示时的不同行</span><br><span class="line">gj: 向上移动一个屏幕行</span><br><span class="line">gk: 向下移动一个屏幕行</span><br><span class="line">0: 移动到行首</span><br><span class="line">g0: 移动到屏幕行行首</span><br><span class="line">^: 移动到行首第一个非空白符</span><br><span class="line">g^: 移动屏幕行第一个非空白符</span><br><span class="line">$: 移动到行尾</span><br><span class="line">g$: 移动到屏幕行行尾</span><br><span class="line">ctrl+e</span><br><span class="line">:num: 跳转到指定行</span><br><span class="line">zt: 移动位置，将当前行置为顶部</span><br><span class="line">zz: 置为中间</span><br><span class="line">zb: 置为底部</span><br></pre></td></tr></table></figure>
+<p>参考文档：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:h motion.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="基于单词移动"><a href="#基于单词移动" class="headerlink" title="基于单词移动"></a>基于单词移动</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">w: 移动到下一个单词的开头</span><br><span class="line">b: 移动到当前单词、上一个词的开头</span><br><span class="line">e: 移动到当前单词、下一个词的结尾</span><br><span class="line">ge: 移动上一个单词的结尾</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>参考文档：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:h word-motions</span><br></pre></td></tr></table></figure>
+
+<h3 id="基于查找的移动"><a href="#基于查找的移动" class="headerlink" title="基于查找的移动"></a>基于查找的移动</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f&#123;char&#125;: 正向查找指定字符，如果当前行有多个指定字符，则可以通过再次按`;`来继续查找，当跳转过头时可以通过按`,`来回退</span><br><span class="line">F&#123;char&#125;: 反向查找指定字符</span><br><span class="line">t&#123;char&#125;: 正向查找指定字符并跳转到指定字符前一个字符</span><br><span class="line">T&#123;char&#125;: 反向查找指定字符并跳转到指定字符后一个字符</span><br><span class="line">/&#123;word&#125;: 查找指定单词，然后可以按`n`继续正向查找，或者按`N`反向查找</span><br></pre></td></tr></table></figure>
+<p>参考文档：  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:h f</span><br><span class="line">:h ;</span><br><span class="line">:h ,</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改操作"><a href="#修改操作" class="headerlink" title="修改操作"></a>修改操作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">da&quot;: 删除被括号包裹的内容</span><br><span class="line">di]: 删除被括号包裹的内容</span><br><span class="line">ci&#123;: 修改被大括号包裹的内容</span><br><span class="line">dap: 删除段落</span><br><span class="line">vaw: 高亮选中单词</span><br><span class="line">%s/$/$;,/g: 在每行结尾添加&quot;,</span><br></pre></td></tr></table></figure>
+
+<h2 id="窗口操作"><a href="#窗口操作" class="headerlink" title="窗口操作"></a>窗口操作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ctrl+w s: 水平拆分窗口</span><br><span class="line">ctrl+w v: 垂直拆分窗口</span><br><span class="line">:split filename</span><br><span class="line">:vsplit filename</span><br><span class="line">:close: 关闭当前窗口</span><br><span class="line">:only: 关闭除当前窗口的其他所有窗口</span><br></pre></td></tr></table></figure>
+
+<h2 id="缓冲区操作"><a href="#缓冲区操作" class="headerlink" title="缓冲区操作"></a>缓冲区操作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:ls: 查看所有缓冲区列表</span><br><span class="line">:bnext: 切换到下一个缓冲区</span><br><span class="line">:bprev: 切换到上一个缓冲区</span><br></pre></td></tr></table></figure>
+
+<h2 id="标签页操作"><a href="#标签页操作" class="headerlink" title="标签页操作"></a>标签页操作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:tabedit filename: 新建标签页并打开指定文件的缓冲区，不跟文件名则打开一个新的标签页包含一个空缓冲区</span><br><span class="line">:tabclose: 关闭当前标签页</span><br><span class="line">:tabonly: 关闭除当前标签页的其他标签页</span><br><span class="line">gt: 切换到下一个标签页</span><br><span class="line">gT: 切换到上一个标签页</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">:edit filename: 打开文件，需指定文件的路径，相对路径或绝对路径均可</span><br><span class="line">:find filename: 通过文件名打开文件而不用指定确切路径</span><br><span class="line">:E: 打开当前目录，它是命令:explore的缩写形式</span><br><span class="line">:Sexplore: 水平拆分窗口并在新窗口中打开当前目录</span><br><span class="line">:Vexplore: 垂直拆分窗口并在新窗口中打开当前目录</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:set list: 显示不可见字符</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/vim/" rel="tag"># vim</a>
+              <a href="/tags/cheat-sheet/" rel="tag"># cheat_sheet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/01/08/tcpdump-guide/" rel="prev" title="tcpdump使用指南">
+                  <i class="fa fa-angle-left"></i> tcpdump使用指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/04/26/proc-file-system/" rel="next" title="/proc文件系统详解">
+                  /proc文件系统详解 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">robin zhang</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"nicolerobin","repo":"nicolerobin.github.io","client_id":"127f5a84a9541b7ae466","client_secret":"0a8f715f4aeb0f5c9b507fb86cb65b9ef596bc02","admin_user":"nicolerobin","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"328418aa5075865aa619f785ae623507"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
