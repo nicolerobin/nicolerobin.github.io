@@ -20,29 +20,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.nicolerobin.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.21.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="自嘲本是后山人，偶做前堂客。醉舞经阁半卷书，坐井说天阔。大志戏功名，海斗量福祸。论到囊中羞涩时，怒指乾坤错。">
+    <meta name="description" content="brew使用技巧一、常用命令1.1、服务相关123456brew services --help: 查看帮助文档brew services list: 列出所有服务brew services run: 运行服务但不设置为登录时启动brew services start: 运行服务并设置为登录时启动brew services stop: 停止服务并删除登录时启动brew services resta">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自嘲">
-<meta property="og:url" content="http://blog.nicolerobin.top/2022/12/05/zichao/index.html">
+<meta property="og:title" content="brew-cheat-sheet.md">
+<meta property="og:url" content="http://blog.nicolerobin.top/2024/12/25/brew-cheat-sheet-md/index.html">
 <meta property="og:site_name" content="听香水榭">
-<meta property="og:description" content="自嘲本是后山人，偶做前堂客。醉舞经阁半卷书，坐井说天阔。大志戏功名，海斗量福祸。论到囊中羞涩时，怒指乾坤错。">
+<meta property="og:description" content="brew使用技巧一、常用命令1.1、服务相关123456brew services --help: 查看帮助文档brew services list: 列出所有服务brew services run: 运行服务但不设置为登录时启动brew services start: 运行服务并设置为登录时启动brew services stop: 停止服务并删除登录时启动brew services resta">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-12-04T22:22:01.000Z">
-<meta property="article:modified_time" content="2024-11-02T10:57:55.598Z">
+<meta property="article:published_time" content="2024-12-25T13:07:36.000Z">
+<meta property="article:modified_time" content="2024-12-25T13:15:17.049Z">
 <meta property="article:author" content="robin zhang">
-<meta property="article:tag" content="诗词">
-<meta property="article:tag" content="丁元英">
+<meta property="article:tag" content="cheat_sheet">
+<meta property="article:tag" content="brew">
+<meta property="article:tag" content="homebrew">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://blog.nicolerobin.top/2022/12/05/zichao/">
+<link rel="canonical" href="http://blog.nicolerobin.top/2024/12/25/brew-cheat-sheet-md/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://blog.nicolerobin.top/2022/12/05/zichao/","path":"2022/12/05/zichao/","title":"自嘲"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://blog.nicolerobin.top/2024/12/25/brew-cheat-sheet-md/","path":"2024/12/25/brew-cheat-sheet-md/","title":"brew-cheat-sheet.md"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>自嘲 | 听香水榭</title>
+<title>brew-cheat-sheet.md | 听香水榭</title>
   
 
 
@@ -115,7 +116,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%98%B2"><span class="nav-number">1.</span> <span class="nav-text">自嘲</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#brew%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.</span> <span class="nav-text">brew使用技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">一、常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1%E3%80%81%E6%9C%8D%E5%8A%A1%E7%9B%B8%E5%85%B3"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1、服务相关</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,7 +173,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://blog.nicolerobin.top/2022/12/05/zichao/">
+    <link itemprop="mainEntityOfPage" href="http://blog.nicolerobin.top/2024/12/25/brew-cheat-sheet-md/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -185,12 +186,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="自嘲 | 听香水榭">
+      <meta itemprop="name" content="brew-cheat-sheet.md | 听香水榭">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          自嘲
+          brew-cheat-sheet.md
         </h1>
 
         <div class="post-meta-container">
@@ -200,15 +201,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2022-12-05 06:22:01" itemprop="dateCreated datePublished" datetime="2022-12-05T06:22:01+08:00">2022-12-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-11-02 18:57:55" itemprop="dateModified" datetime="2024-11-02T18:57:55+08:00">2024-11-02</time>
+      <time title="Created: 2024-12-25 21:07:36 / Modified: 21:15:17" itemprop="dateCreated datePublished" datetime="2024-12-25T21:07:36+08:00">2024-12-25</time>
     </span>
 
   
@@ -220,8 +215,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="自嘲"><a href="#自嘲" class="headerlink" title="自嘲"></a>自嘲</h2><p>本是后山人，偶做前堂客。<br>醉舞经阁半卷书，坐井说天阔。<br>大志戏功名，海斗量福祸。<br>论到囊中羞涩时，怒指乾坤错。</p>
-
+    <div class="post-body" itemprop="articleBody"><h1 id="brew使用技巧"><a href="#brew使用技巧" class="headerlink" title="brew使用技巧"></a>brew使用技巧</h1><h2 id="一、常用命令"><a href="#一、常用命令" class="headerlink" title="一、常用命令"></a>一、常用命令</h2><h3 id="1-1、服务相关"><a href="#1-1、服务相关" class="headerlink" title="1.1、服务相关"></a>1.1、服务相关</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">brew services --help: 查看帮助文档</span><br><span class="line">brew services list: 列出所有服务</span><br><span class="line">brew services run: 运行服务但不设置为登录时启动</span><br><span class="line">brew services start: 运行服务并设置为登录时启动</span><br><span class="line">brew services stop: 停止服务并删除登录时启动</span><br><span class="line">brew services restart: 重启服务并设置为登录时启动</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -230,22 +224,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E8%AF%97%E8%AF%8D/" rel="tag"># 诗词</a>
-              <a href="/tags/%E4%B8%81%E5%85%83%E8%8B%B1/" rel="tag"># 丁元英</a>
+              <a href="/tags/cheat-sheet/" rel="tag"># cheat_sheet</a>
+              <a href="/tags/brew/" rel="tag"># brew</a>
+              <a href="/tags/homebrew/" rel="tag"># homebrew</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/06/18/chibihuaigu/" rel="prev" title="赤壁怀古">
-                  <i class="fa fa-angle-left"></i> 赤壁怀古
+                <a href="/2024/11/02/docker-cheat-sheet/" rel="prev" title="docker_cheat_sheet">
+                  <i class="fa fa-angle-left"></i> docker_cheat_sheet
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/12/13/golang-gc-trace/" rel="next" title="golang调试、查看gc信息">
-                  golang调试、查看gc信息 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -314,7 +306,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"nicolerobin","repo":"nicolerobin.github.io","client_id":"127f5a84a9541b7ae466","client_secret":"0a8f715f4aeb0f5c9b507fb86cb65b9ef596bc02","admin_user":"nicolerobin","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"ca03a947f5bf480f0cc630e73b2012a6"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"nicolerobin","repo":"nicolerobin.github.io","client_id":"127f5a84a9541b7ae466","client_secret":"0a8f715f4aeb0f5c9b507fb86cb65b9ef596bc02","admin_user":"nicolerobin","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"9cb1d89ce936bec3dff1a1fd4b75516e"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
